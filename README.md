@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
 
 ## 🔗 Live Demo
-[![Open in Streamlit](https://ann-classification-churn-mghwjyw8t2jd3maxdhxdrr.streamlit.app/)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ann-classification-churn-mghwjyw8t2jd3maxdhxdrr.streamlit.app/)
 
 ---
 
