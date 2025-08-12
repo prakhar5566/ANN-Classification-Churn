@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st 
 import pandas as pd
 import numpy as np
 import pickle
@@ -30,13 +30,15 @@ st.download_button(
     mime='text/csv'
 )
 
-# Load Model & Scaler
+# Load Model, Scaler & History
 @st.cache_resource
-def load_model_scaler():
+def load_model_scaler_history():
     model = tf.keras.models.load_model("model.h5")
     scaler = pickle.load(open("scaler.pkl", "rb"))
-    return model, scaler
-model, sc = load_model_scaler()
+    history = pickle.load(open("model_history.pkl", "rb"))  # Ensure you saved this after training
+    return model, scaler, history
+
+model, sc, model_history = load_model_scaler_history()
 
 # Evaluate Model
 X = df.iloc[:, 3:13].drop(df.columns[4:7], axis=1)
@@ -49,6 +51,28 @@ acc = accuracy_score(y, y_pred)
 
 st.subheader("Confusion Matrix")
 st.write(pd.DataFrame(cm, columns=['Predicted No', 'Predicted Yes'], index=['Actual No', 'Actual Yes']))
+
+# Accuracy Plot
+st.subheader("📈 Model Accuracy Over Epochs")
+fig_acc, ax_acc = plt.subplots()
+ax_acc.plot(model_history['accuracy'])
+ax_acc.plot(model_history['val_accuracy'])
+ax_acc.set_title('Model Accuracy')
+ax_acc.set_ylabel('Accuracy')
+ax_acc.set_xlabel('Epoch')
+ax_acc.legend(['Train', 'Validation'], loc='upper left')
+st.pyplot(fig_acc)
+
+# # Loss Plot
+# st.subheader("📉 Model Loss Over Epochs")
+# fig_loss, ax_loss = plt.subplots()
+# ax_loss.plot(model_history['loss'])
+# ax_loss.plot(model_history['val_loss'])
+# ax_loss.set_title('Model Loss')
+# ax_loss.set_ylabel('Loss')
+# ax_loss.set_xlabel('Epoch')
+# ax_loss.legend(['Train', 'Validation'], loc='upper left')
+# st.pyplot(fig_loss)
 
 st.subheader("Accuracy Score")
 st.write(f"{acc * 100:.2f}%")
@@ -65,7 +89,6 @@ is_active_member = st.selectbox("Is Active Member? (1 = Yes, 0 = No)", [1, 0])
 estimated_salary = st.number_input("Estimated Salary", value=50000.0)
 
 if st.button("Predict Churn"):
-    # Ensure same feature order and count as training data
     new_data = np.array([[credit_score, tenure, balance, num_of_products, has_cr_card, is_active_member, estimated_salary]])
     new_data_scaled = sc.transform(new_data)
     prediction = model.predict(new_data_scaled)
