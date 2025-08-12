@@ -37,11 +37,20 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
     verbose=1,
     restore_best_weights=True
 )
-# Train
-classifier.fit(x_train, y_train, validation_split=0.33, batch_size=10, epochs=50, verbose=1)
 
-# Save model and scaler
+# Train and capture history
+history = classifier.fit(
+    x_train, y_train,
+    validation_split=0.33,
+    batch_size=10,
+    epochs=50,
+    verbose=1,
+    callbacks=[early_stopping]
+)
+
+# Save model, scaler, and history
 classifier.save("model.h5")
 pickle.dump(sc, open("scaler.pkl", "wb"))
+pickle.dump(history.history, open("model_history.pkl", "wb"))
 
-print("✅ Model and scaler saved successfully.")
+print("✅ Model, scaler, and training history saved successfully.")
