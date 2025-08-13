@@ -49,8 +49,8 @@ y_pred = (model.predict(X_scaled) > 0.5)
 cm = confusion_matrix(y, y_pred)
 acc = accuracy_score(y, y_pred)
 
-st.subheader("Confusion Matrix")
-st.write(pd.DataFrame(cm, columns=['Predicted No', 'Predicted Yes'], index=['Actual No', 'Actual Yes']))
+# st.subheader("Confusion Matrix")
+# st.write(pd.DataFrame(cm, columns=['Predicted No', 'Predicted Yes'], index=['Actual No', 'Actual Yes']))
 
 # Accuracy Plot
 st.subheader("📈 Model Accuracy Over Epochs")
@@ -98,3 +98,4 @@ if st.button("Predict Churn"):
         st.success("✅ This customer is likely to stay.")
 
 st.caption("Model trained on Churn_Modelling.csv dataset.")
+
