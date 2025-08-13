@@ -22,9 +22,9 @@ x_test = sc.transform(x_test)
 
 # Build model
 classifier = Sequential()
-classifier.add(Dense(units=11, activation='relu'))
-classifier.add(Dense(units=7, activation='relu'))
-classifier.add(Dense(units=5, activation='relu'))
+classifier.add(Dense(units=16, activation='relu'))
+classifier.add(Dense(units=8, activation='relu'))
+classifier.add(Dense(units=4, activation='relu'))
 classifier.add(Dense(units=1, activation='sigmoid'))
 
 classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
@@ -32,7 +32,7 @@ classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accur
 # Early stopping
 early_stopping = tf.keras.callbacks.EarlyStopping(
     monitor="val_loss",
-    min_delta=0.001,
+    min_delta=0.0001,
     patience=10,
     verbose=1,
     restore_best_weights=True
@@ -41,8 +41,8 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
 # Train and capture history
 history = classifier.fit(
     x_train, y_train,
-    validation_split=0.33,
-    batch_size=10,
+    validation_split=0.2,
+    batch_size=32,
     epochs=50,
     verbose=1,
     callbacks=[early_stopping]
